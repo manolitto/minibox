@@ -1,2 +1,50 @@
-# minibox
-Customizable and modular display and storage boxes for tabletop miniature models 
+<p align="center"><img src="img/IMG_20210620_173520.jpg" alt="MiniBox showcase 1" width="400"></p>
+
+<h1 align="center">MiniBox</h1>
+<p align="center">Customizable and modular display and storage boxes for tabletop miniature models</p>
+<p align="center">
+  <a href="#about">About</a> •
+  <a href="#download">Download</a> •
+  <a href="#customize">Customize</a> •
+<!--  <a href="#faqs">FAQs</a> • -->
+  <a href="#credits">Credits</a> •
+  <a href="#license">License</a>
+</p>
+
+## About
+
+Need a simple but flexible solution for storing and transporting your 28/32 mm tabletop minitatures?
+
+<p align="center"><img src="img/IMG_20210620_173502.jpg" alt="MiniBox showcase 1" width="400"></p>
+
+#### Key features:
+
+- easy and fast to print: box for a standard medium mini is FDM-printed in about 90 minutes
+- modular: boxes can be stacked (and even connected with OpenLOCK clips!)
+- customizable: use the exact dimensions of your miniatures to model custom sized boxes
+- transportable: minis are protected even when they are stacked lying horizontally (when using magnetic bases)
+- playable: as a GM you can stack minis in front of you without revealing them
+
+<p align="center"><img src="img/IMG_20210620_173730.jpg" alt="MiniBox showcase 1" width="400"></p>
+
+## Customize
+
+1. Download and install OpenSCAD from [here](https://openscad.org/downloads.html).
+2. Open [MiniatureBox.scad](./MiniatureBox.scad)
+3. Enter the number of "box passengers", the size of the base and the dimensions of your mini model.
+4. Render and Export STL
+
+<p align="center"><img src="img/OpenSCAD.png" alt="MiniBox showcase 1" width="600"></p>
+
+## Download
+
+You can find the latest release [here](https://github.com/manolitto/minibox/releases/latest).
+
+## Credits
+
+The OpenLOCK system was created by [Printablescenery](https://www.printablescenery.com/product/open-lock/).
+
+
+## License
+
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">OpenVLex 2</span> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
