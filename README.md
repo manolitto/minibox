@@ -6,14 +6,14 @@
   <a href="#about">About</a> •
   <a href="#download">Download</a> •
   <a href="#customize">Customize</a> •
-<!--  <a href="#faqs">FAQs</a> • -->
+  <a href="#faqs">FAQs</a> •
   <a href="#credits">Credits</a> •
   <a href="#license">License</a>
 </p>
 
 ## About
 
-Need a simple but flexible solution for storing and transporting your 28/32 mm tabletop minitatures?
+Do you need a simple but flexible solution for storing and transporting your 28/32 mm tabletop minitatures?
 
 <p align="center"><img src="img/IMG_20210620_173502.jpg" alt="MiniBox showcase 1" width="800"></p>
 
@@ -41,10 +41,24 @@ Need a simple but flexible solution for storing and transporting your 28/32 mm t
 
 You can find the latest release [here](https://github.com/manolitto/minibox/releases/latest).
 
+## FAQs
+
+**Question:** What size are the magnets for the ready-made boxes?
+
+**Answer:** Axially magnetized cylinder magnets with a diameter of 5 mm (~ 2/10") and thickness of 1 mm (~ 1/32" - 1/24").
+
+---
+
+**Question:** Not able to get 5x1 mm magnets, I want to use a different size...
+
+**Answer:** Simply adapt the "Magnet cut out" parameter in the SCAD file and create custom boxes.
+
+---
+
+
 ## Credits
 
 The OpenLOCK system was created by [Printablescenery](https://www.printablescenery.com/product/open-lock/).
-
 
 ## License
 
