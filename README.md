@@ -25,7 +25,7 @@ Do you need a simple but flexible solution for storing and transporting your 28/
 - transportable: minis are protected even when they are stacked lying horizontally (when using magnetic bases)
 - playable: as a GM you can stack minis in front of you without revealing them
 - protective: less dust on your minis when displayed on an open shelf
-- compatible: read-made boxes can be used "out of the box" :wink:&nbsp; with my [magnetic mini bases](https://github.com/manolitto/minibase)
+- compatible: ready-made boxes can be used "out of the box" :wink:&nbsp; with my [magnetic mini bases](https://github.com/manolitto/minibase)
 
 <p align="center"><img src="img/IMG_20210620_173730.jpg" alt="MiniBox showcase 1" width="600"></p>
 
