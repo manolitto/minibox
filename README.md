@@ -46,7 +46,7 @@ You can find the latest release [here](https://github.com/manolitto/minibox/rele
 
 **Question:** What size are the magnets for the ready-made boxes?
 
-**Answer:** Axially magnetized cylinder magnets with a diameter of 5 mm (~ 2/10") and thickness of 1 mm (~ 1/32" - 1/24").
+**Answer:** Axially magnetized cylinder magnets with a diameter of 5 mm (~ 2/10") and thickness of 1 mm (~ 1/32" - 1/24"). I am currently using [these here](https://www.amazon.de/gp/product/B082R64C9N/).
 
 ---
 
