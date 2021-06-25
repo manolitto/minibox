@@ -4,7 +4,7 @@
 
 /* [Box Configuration] */
 // Overall type regarding side and front walls
-Box_Type = "open_concave"; //["open_concave":Open box with concave cut side-walls, "open_solid":Open box with solid side-walls, "closeable":Closeable box with slide-in front wall]
+Box_Type = "open_concave"; //["open_concave":Open box with concave cut side-walls, "open_solid":Open box with solid side-walls, "closable":Closable box with slide-in front wall]
 // Cut out OpenLOCK connector bays?
 Openlock_Support = "yes"; //["yes":Yes - cut out OpenLOCK connector bays, "no":No]
 
@@ -82,10 +82,10 @@ rail_depth = 1;
 /* [Hidden] */
 
 // because of the upper rail we have to increase the z padding for the mini to pass through the opening:
-padding_z_effective = padding_z + (Box_Type=="closeable" ? rail_depth : 0);
-ceiling_edge_thickness = Ceiling_Thickness + (Box_Type=="closeable" ? rail_depth : 0);
+padding_z_effective = padding_z + (Box_Type=="closable" ? rail_depth : 0);
+ceiling_edge_thickness = Ceiling_Thickness + (Box_Type=="closable" ? rail_depth : 0);
 
-front_wall_thickness = Box_Type=="closeable" ? rail_offset + rail_width :0;
+front_wall_thickness = Box_Type=="closable" ? rail_offset + rail_width :0;
 
 mini_x = max(Mini_Width, Mini_Overhang_Left + Mini_Base_Size + Mini_Overhang_Right);
 mini_y = max(Mini_Depth, Mini_Overhang_Front + Mini_Base_Size + Mini_Overhang_Back);
@@ -317,13 +317,13 @@ module box() {
             
             if (Box_Type == "open_concave") {
                 round_sidewall_cuts();
-            } else if (Box_Type == "closeable") {
+            } else if (Box_Type == "closable") {
                 rails_sidewall_cuts();
                 rails_bottom_rail_negative();
             }
         }
         
-        if (Box_Type == "closeable") {
+        if (Box_Type == "closable") {
             frontCeiling_Thickness_rails();
         }
     }
@@ -352,7 +352,7 @@ translate([z*Grid_Size, 0, y*Grid_Size])
 rotate([-90,0,90])
   box();
 
-if (Box_Type == "closeable") {
+if (Box_Type == "closable") {
   translate([z*Grid_Size - Floor_Thickness, -x*Grid_Size-10, rail_width])
   rotate([-90,0,90])
     slide_in_front_wall();
