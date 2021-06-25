@@ -22,7 +22,7 @@ Do you need a simple but flexible solution for storing and transporting your 28/
 - easy and fast to print: box for a standard medium mini is FDM-printed in about 90 minutes
 - modular: boxes can be stacked (and even connected with OpenLOCK clips!)
 - customizable: use the exact dimensions of your miniatures to model custom sized boxes
-- transportable: minis are protected even when they are stacked lying horizontally (when using magnetic bases)
+- transportable: minis are protected even when they are stacked lying horizontally (when used with [magnetic bases](https://github.com/manolitto/minibase))
 - playable: as a GM you can stack minis in front of you without revealing them
 - protective: less dust on your minis when displayed on an open shelf
 - compatible: ready-made boxes can be used "out of the box" :wink:&nbsp; with my [magnetic mini bases](https://github.com/manolitto/minibase)
@@ -63,4 +63,4 @@ The OpenLOCK system was created by [Printablescenery](https://www.printablescene
 
 ## License
 
-<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">OpenVLex 2</span> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">MiniBox</span> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
