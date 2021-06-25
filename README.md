@@ -20,11 +20,12 @@ Do you need a simple but flexible solution for storing and transporting your 28/
 #### Key features:
 
 - easy and fast to print: box for a standard medium mini is FDM-printed in about 90 minutes
-- modular: boxes can be stacked (and even connected with OpenLOCK clips!)
 - customizable: use the exact dimensions of your miniatures to model custom sized boxes
+- versatile: choose between beautiful boxes with round cut outs or more protective boxes with closable front walls 
 - transportable: minis are protected even when they are stacked lying horizontally (when used with [magnetic bases](https://github.com/manolitto/minibase))
 - playable: as a GM you can stack minis in front of you without revealing them
-- protective: less dust on your minis when displayed on an open shelf
+- modular: boxes can be stacked and even connected with OpenLOCK clips (which is very convenient when it comes to game play and you want to hold together similar monsters!)
+- protective: less dust on your minis when displayed on an open shelf and no dust when using closeable boxes
 - compatible: ready-made boxes can be used "out of the box" :wink:&nbsp; with my [magnetic mini bases](https://github.com/manolitto/minibase)
 
 <p align="center"><img src="img/IMG_20210620_173730.jpg" alt="MiniBox showcase 1" width="600"></p>
@@ -33,7 +34,8 @@ Do you need a simple but flexible solution for storing and transporting your 28/
 
 1. Download and install OpenSCAD from [here](https://openscad.org/downloads.html).
 2. Open [MiniatureBox.scad](./MiniatureBox.scad)
-3. Enter the number of "box passengers", the size of the base and the dimensions of your mini model.
+3. Choose box type (open or closable)
+3. Enter number of "box passengers", size of the base and the dimensions of your mini model
 4. Render and Export STL
 
 <p align="center"><img src="img/OpenSCAD.png" alt="MiniBox showcase 1" width="600"></p>
