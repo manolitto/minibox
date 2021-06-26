@@ -11,22 +11,30 @@ Openlock_Support = "yes"; //["yes":Yes - cut out OpenLOCK connector bays, "no":N
 /* [Miniature Configuration] */
 // How many minis shall be stored?
 Number_of_Minis = 1; //[1:8]
+
 // Diameter of mini's base
 Mini_Base_Size = 25.25; //[16.37:small - 16.37 mm, 25.25:medium - 25.25 mm, 50.5:large - 50.5 mm, 75.75:huge - 75.75 mm, 101.0:gargantuan - 101 mm]
-// Total width of mini when larger than base size (in mm)
-Mini_Width = 0; //[::float]
-// Total depth of mini when larger than base size (in mm)
-Mini_Depth = 0;   //[::float]
+
+// Total width of mini (only when larger than base size)
+Mini_Width = 0.01; //[::float]
+// Total depth of mini (only when larger than base size)
+Mini_Depth = 0.01;   //[::float]
 // Total height of mini including base (in mm)
 Mini_Height = 38;   //[::float]
-// Overhang over base on left side (in mm)
-Mini_Overhang_Left = 0.01; //[::float]
-// Overhang over base on right side (in mm)
-Mini_Overhang_Right = 0.01; //[::float]
-// Overhang over base on front side (in mm)
-Mini_Overhang_Front = 0.01; //[::float]
-// Overhang over base on back side (in mm)
-Mini_Overhang_Back = 0.01; //[::float]
+
+// How is the left and right overhang of the mini distributed?
+Left_Right_Overhang_Mode = "even"; //["even":Same overhang on both sides, "only_left":Overhang on left side only, "only_right":Overhang on right side only]
+// Fixed left side overhang (in mm)
+Left_Overhang_Override = 0.01; //[::float]
+// Fixed right side overhang (in mm)
+Right_Overhang_Override = 0.01; //[::float]
+
+// How is the front and back overhang of the mini distributed?
+Front_Back_Overhang_Mode = "even"; //["even":Same overhang on both sides, "only_front":Overhang on front side only, "only_back":Overhang on back side only]
+// Fixed front side overhang (in mm)
+Front_Overhang_Override = 0.01; //[::float]
+// Fixed back side overhang (in mm)
+Back_Overhang_Override = 0.01; //[::float]
 
 /* [Box Size Override] */
 // Minimal width of box (measured in grid fields)
@@ -87,20 +95,36 @@ ceiling_edge_thickness = Ceiling_Thickness + (Box_Type=="closable" ? rail_depth 
 
 front_wall_thickness = Box_Type=="closable" ? rail_offset + rail_width :0;
 
-mini_x = max(Mini_Width, Mini_Overhang_Left + Mini_Base_Size + Mini_Overhang_Right);
-mini_y = max(Mini_Depth, Mini_Overhang_Front + Mini_Base_Size + Mini_Overhang_Back);
+mini_x = max(Mini_Width, Left_Overhang_Override + Mini_Base_Size + Right_Overhang_Override);
+mini_y = max(Mini_Depth, Front_Overhang_Override + Mini_Base_Size + Back_Overhang_Override);
 mini_z = Mini_Height;
 
-overhang_x = Mini_Overhang_Left + Mini_Overhang_Right;
-actual_overhang_x = mini_x - Mini_Base_Size;
-actual_overhang_left = overhang_x == 0 ? actual_overhang_x / 2 : Mini_Overhang_Left * actual_overhang_x / overhang_x;
-actual_overhang_right = overhang_x == 0 ? actual_overhang_x / 2 : Mini_Overhang_Right * actual_overhang_x / overhang_x;
+total_width_overhang = mini_x - Mini_Base_Size;
+distr_width_overhang = total_width_overhang - Left_Overhang_Override - Right_Overhang_Override;
+overhang_left  = Left_Right_Overhang_Mode == "only_left"  ? Left_Overhang_Override + distr_width_overhang :
+                 Left_Right_Overhang_Mode == "only_right" ? Left_Overhang_Override :
+                                                            Left_Overhang_Override + distr_width_overhang / 2;
+overhang_right = Left_Right_Overhang_Mode == "only_left"  ? Right_Overhang_Override :
+                 Left_Right_Overhang_Mode == "only_right" ? Right_Overhang_Override + distr_width_overhang :
+                                                            Right_Overhang_Override + distr_width_overhang / 2;
+total_depth_overhang = mini_y - Mini_Base_Size;
+distr_depth_overhang = total_depth_overhang - Front_Overhang_Override - Back_Overhang_Override;
+overhang_front = Front_Back_Overhang_Mode == "only_front" ? Front_Overhang_Override + distr_depth_overhang :
+                 Front_Back_Overhang_Mode == "only_back"  ? Front_Overhang_Override :
+                                                            Front_Overhang_Override + distr_depth_overhang / 2;
+overhang_back  = Front_Back_Overhang_Mode == "only_front" ? Back_Overhang_Override :
+                 Front_Back_Overhang_Mode == "only_back"  ? Back_Overhang_Override + distr_depth_overhang :
+                                                            Back_Overhang_Override + distr_depth_overhang / 2;
 
-overhang_y = Mini_Overhang_Front + Mini_Overhang_Back;
-actual_overhang_y = mini_y - Mini_Base_Size;
-actual_overhang_front = overhang_y == 0 ? actual_overhang_y / 2 : Mini_Overhang_Front * actual_overhang_y / overhang_y;
-actual_overhang_back = overhang_y == 0 ? actual_overhang_y / 2 : Mini_Overhang_Back * actual_overhang_y / overhang_y;
+echo(
+    str("Actual Overhangs: ",
+        "Left=", overhang_left,
+        ", Right=", overhang_right,
+        ", Front=", overhang_front,
+        ", Back=", overhang_back
+));
 
+                    
 padded_mini_x = padding_x_left + mini_x + padding_x_right;
 padded_mini_y = padding_y_front + mini_y + padding_y_back;
 padded_mini_z = mini_z + padding_z_effective;
@@ -117,19 +141,27 @@ eff_mini_x = x_space_per_mini - padding_x_left - padding_x_right;
 eff_mini_y = y_space_per_mini - padding_y_front - padding_y_back;
 eff_mini_z = z_space_per_mini - padding_z_effective;
 
-eff_overhang_left = actual_overhang_left * eff_mini_x / mini_x;
-eff_overhang_right = actual_overhang_right * eff_mini_x / mini_x;
+eff_overhang_left = overhang_left + (eff_mini_x - mini_x) / 2;
+eff_overhang_right = overhang_right + (eff_mini_x - mini_x) / 2;
 eff_base_x = x_space_per_mini - eff_overhang_left - eff_overhang_right - padding_x_left - padding_x_right;
 
-eff_overhang_front = actual_overhang_front * eff_mini_y / mini_y;
-eff_overhang_back = actual_overhang_back * eff_mini_y / mini_y;
+eff_overhang_front = overhang_front + (eff_mini_y - mini_y) / 2;
+eff_overhang_back = overhang_back + (eff_mini_y - mini_y) / 2;
 eff_base_y = y_space_per_mini - eff_overhang_front - eff_overhang_back - padding_y_front - padding_y_back;
 
 echo(
-    str("Input miniature dimension: ",
+    str("Input miniature dimensions: ",
         mini_x, " x ",
         mini_y, " x ",
         mini_z, " mm"
+));
+
+echo(
+    str("Effective overhangs: ",
+        "Left=", eff_overhang_left,
+        ", Right=", eff_overhang_right,
+        ", Front=", eff_overhang_front,
+        ", Back=", eff_overhang_back
 ));
 
 /*
