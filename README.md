@@ -28,7 +28,11 @@ Do you need a simple but flexible solution for storing and transporting your 28/
 - protective: less dust on your minis when displayed on an open shelf and no dust when using closable boxes
 - compatible: ready-made boxes can be used "out of the box" :wink:&nbsp; with my [magnetic mini bases](https://github.com/manolitto/minibase)
 
-<p align="center"><img src="img/IMG_20210620_173730.jpg" alt="MiniBox showcase 1" width="600"></p>
+<p align="center"><img src="img/IMG_20210620_173730.jpg" alt="MiniBox showcase 2" width="600"></p>
+<p align="center">
+  <img src="img/IMG_20210626_120148.jpg" alt="MiniBox showcase 3" height="400">
+  <img src="img/IMG_20210626_120315.jpg" alt="MiniBox showcase 4" height="400">
+</p>
 
 ## Customize
 
@@ -38,7 +42,7 @@ Do you need a simple but flexible solution for storing and transporting your 28/
 3. Enter number of "box passengers", size of the base and the dimensions of your mini model
 4. Render and Export STL
 
-<p align="center"><img src="img/OpenSCAD.png" alt="MiniBox showcase 1" width="600"></p>
+<p align="center"><img src="img/OpenSCAD.png" alt="OpenSCAD" width="600"></p>
 
 ## Download
 
