@@ -83,9 +83,10 @@ padding_z = 1.2;
 front_wall_buffer = 0.5;
 
 /* [Rail Settings] */
-rail_offset = 1;
-rail_width = 1;
-rail_depth = 1;
+rail_offset = 1.01;
+rail_width_inner = 0.51;
+rail_width_outer = 1.01;
+rail_depth = 1.01;
 
 /* [Hidden] */
 
@@ -99,7 +100,9 @@ is_concave_sides = (Box_Type == "open_concave");
 padding_z_effective = padding_z + (is_closable_box ? rail_depth : 0);
 ceiling_edge_thickness = Ceiling_Thickness + (is_closable_box ? rail_depth : 0);
 
-front_wall_thickness = is_closable_box ? rail_offset + rail_width :0;
+front_wall_thickness = is_closable_box
+                        ? rail_offset + max(rail_width_inner, rail_width_outer)
+                        : 0;
 
 mini_x = max(Mini_Width, Left_Overhang_Override + Mini_Base_Size + Right_Overhang_Override);
 mini_y = max(Mini_Depth, Front_Overhang_Override + Mini_Base_Size + Back_Overhang_Override);
@@ -259,11 +262,11 @@ module rails_bottom_rail_negative() {
     
     translate([-0.1, rail_offset, Floor_Thickness - rail_depth])
     hull() {
-        translate([0, rail_width/2, 0])
-          cube([x*Grid_Size +0.2, rail_width/2, 0.01]);
+        translate([0, rail_width_outer - rail_width_inner, 0])
+          cube([x*Grid_Size +0.2, rail_width_inner, 0.01]);
         
         translate([0, 0, rail_depth])
-          cube([x*Grid_Size +0.2, rail_width, 0.01]);
+          cube([x*Grid_Size +0.2, rail_width_outer, 0.01]);
     }
 
 }
@@ -272,12 +275,12 @@ module rails_sidewall_cuts() {
     // side wall cut
     h = z*Grid_Size - Floor_Thickness - Ceiling_Thickness;
     translate([0 -0.1, -0.1, Floor_Thickness])
-      cube([x*Grid_Size +0.2, rail_offset + rail_width + 0.1, h]);
+      cube([x*Grid_Size +0.2, rail_offset + rail_width_outer + 0.1, h]);
 }
 
 module frontCeiling_Thickness_rails() {
     // back 
-    translate([0, rail_offset + rail_width, z*Grid_Size - Ceiling_Thickness - rail_depth])
+    translate([0, rail_offset + rail_width_outer, z*Grid_Size - Ceiling_Thickness - rail_depth])
     hull() {
       cube([x*Grid_Size, 0.1, 0.1]);
       translate([0,0,rail_depth])
@@ -289,7 +292,7 @@ module frontCeiling_Thickness_rails() {
       translate([0, 0, 0])
         cube([x*Grid_Size, rail_offset, 0.1]);
       translate([0, 0, rail_depth])
-        cube([x*Grid_Size, rail_offset + rail_width/2, 0.1]);
+        cube([x*Grid_Size, rail_offset + (rail_width_outer - rail_width_inner), 0.1]);
     }
 }
 
@@ -369,13 +372,15 @@ module box() {
 
 module slide_in_front_wall() {
     h = z*Grid_Size - Ceiling_Thickness - Floor_Thickness + rail_depth - front_wall_buffer;
+    
+    translate([0, -(rail_width_outer - rail_width_inner),0])
     union() {
         hull() {
             translate([0, 0, rail_depth])
-              cube([x*Grid_Size, rail_width, h - 2*rail_depth]);
+              cube([x*Grid_Size, rail_width_inner, h - 2*rail_depth]);
 
-            translate([0, rail_width/2, 0])
-              cube([x*Grid_Size, rail_width/2, h]);
+            translate([0, rail_width_outer - rail_width_inner, 0])
+              cube([x*Grid_Size, rail_width_inner, h]);
         }
         
         //handles
@@ -386,6 +391,11 @@ module slide_in_front_wall() {
     }
 }
 
+module slide_in_front_wall_2d() {
+    h = z*Grid_Size - Ceiling_Thickness - Floor_Thickness + rail_depth - front_wall_buffer;
+    cube([x*Grid_Size, 1, h]);
+}
+
 if (draw_box) {
   translate([z*Grid_Size, 0, y*Grid_Size])
   rotate([-90,0,90])
@@ -393,7 +403,7 @@ if (draw_box) {
 }
 
 if (draw_3d_door) {
-  translate([z*Grid_Size - Floor_Thickness, -x*Grid_Size-10, rail_width])
+  translate([z*Grid_Size - Floor_Thickness, -x*Grid_Size-10, rail_width_inner])
   rotate([-90,0,90])
     slide_in_front_wall();
 }
@@ -401,7 +411,7 @@ if (draw_3d_door) {
 if (draw_2d_door) {
   projection()
     rotate([-90,0,90])
-    slide_in_front_wall();
+    slide_in_front_wall_2d();
 }
 
 echo(
