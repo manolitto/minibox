@@ -4,7 +4,7 @@
 
 /* [Box Configuration] */
 // Overall type regarding side and front walls
-Box_Type = "open_concave"; //["open_concave":Open box with concave cut side-walls, "open_solid":Open box with solid side-walls, "closable":Closable box with slide-in front wall]
+Box_Type = "open_concave"; //["open_concave":Open box with concave cut side-walls, "open_solid":Open box with solid side-walls, "closable-box-and-door":Closable box with slide-in front wall, "closable-box":Closable box - for slide-in front wall, "3d-door":Slide-in front wall for closable box, "2d-door":2D projection of door only - for laser cuts]
 // Cut out OpenLOCK connector bays?
 Openlock_Support = "yes"; //["yes":Yes - cut out OpenLOCK connector bays, "no":No]
 
@@ -20,7 +20,7 @@ Mini_Width = 0.01; //[::float]
 // Total depth of mini (only when larger than base size)
 Mini_Depth = 0.01;   //[::float]
 // Total height of mini including base (in mm)
-Mini_Height = 38;   //[::float]
+Mini_Height = 38.01;   //[::float]
 
 // How is the left and right overhang of the mini distributed?
 Left_Right_Overhang_Mode = "even"; //["even":Same overhang on both sides, "only_left":Overhang on left side only, "only_right":Overhang on right side only]
@@ -148,6 +148,10 @@ eff_base_x = x_space_per_mini - eff_overhang_left - eff_overhang_right - padding
 eff_overhang_front = overhang_front + (eff_mini_y - mini_y) / 2;
 eff_overhang_back = overhang_back + (eff_mini_y - mini_y) / 2;
 eff_base_y = y_space_per_mini - eff_overhang_front - eff_overhang_back - padding_y_front - padding_y_back;
+
+draw_box = (Box_Type == "open_concave") || (Box_Type == "open_solid") || (Box_Type == "closable-box-and-door") || (Box_Type == "closable-box");
+draw_3d_door = (Box_Type == "closable-box-and-door") || (Box_Type == "3d-door");
+draw_2d_door = (Box_Type == "2d-door");
 
 echo(
     str("Input miniature dimensions: ",
@@ -380,13 +384,21 @@ module slide_in_front_wall() {
     }
 }
 
-translate([z*Grid_Size, 0, y*Grid_Size])
-rotate([-90,0,90])
-  box();
+if (draw_box) {
+  translate([z*Grid_Size, 0, y*Grid_Size])
+  rotate([-90,0,90])
+    box();
+}
 
-if (Box_Type == "closable") {
+if (draw_3d_door) {
   translate([z*Grid_Size - Floor_Thickness, -x*Grid_Size-10, rail_width])
   rotate([-90,0,90])
+    slide_in_front_wall();
+}
+
+if (draw_2d_door) {
+  projection()
+    rotate([-90,0,90])
     slide_in_front_wall();
 }
 
