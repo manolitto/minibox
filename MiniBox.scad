@@ -1,5 +1,5 @@
 /*
- * miniStorage v1.0
+ * MiniBox v1.x
  */
 
 /* [Box Configuration] */
