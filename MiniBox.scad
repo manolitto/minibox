@@ -89,11 +89,17 @@ rail_depth = 1;
 
 /* [Hidden] */
 
-// because of the upper rail we have to increase the z padding for the mini to pass through the opening:
-padding_z_effective = padding_z + (Box_Type=="closable" ? rail_depth : 0);
-ceiling_edge_thickness = Ceiling_Thickness + (Box_Type=="closable" ? rail_depth : 0);
+draw_box = (Box_Type == "open_concave") || (Box_Type == "open_solid") || (Box_Type == "closable-box-and-door") || (Box_Type == "closable-box");
+draw_3d_door = (Box_Type == "closable-box-and-door") || (Box_Type == "3d-door");
+draw_2d_door = (Box_Type == "2d-door");
+is_closable_box = (Box_Type == "closable-box-and-door") || (Box_Type == "closable-box");
+is_concave_sides = (Box_Type == "open_concave");
 
-front_wall_thickness = Box_Type=="closable" ? rail_offset + rail_width :0;
+// because of the upper rail we have to increase the z padding for the mini to pass through the opening:
+padding_z_effective = padding_z + (is_closable_box ? rail_depth : 0);
+ceiling_edge_thickness = Ceiling_Thickness + (is_closable_box ? rail_depth : 0);
+
+front_wall_thickness = is_closable_box ? rail_offset + rail_width :0;
 
 mini_x = max(Mini_Width, Left_Overhang_Override + Mini_Base_Size + Right_Overhang_Override);
 mini_y = max(Mini_Depth, Front_Overhang_Override + Mini_Base_Size + Back_Overhang_Override);
@@ -148,10 +154,6 @@ eff_base_x = x_space_per_mini - eff_overhang_left - eff_overhang_right - padding
 eff_overhang_front = overhang_front + (eff_mini_y - mini_y) / 2;
 eff_overhang_back = overhang_back + (eff_mini_y - mini_y) / 2;
 eff_base_y = y_space_per_mini - eff_overhang_front - eff_overhang_back - padding_y_front - padding_y_back;
-
-draw_box = (Box_Type == "open_concave") || (Box_Type == "open_solid") || (Box_Type == "closable-box-and-door") || (Box_Type == "closable-box");
-draw_3d_door = (Box_Type == "closable-box-and-door") || (Box_Type == "3d-door");
-draw_2d_door = (Box_Type == "2d-door");
 
 echo(
     str("Input miniature dimensions: ",
@@ -351,15 +353,15 @@ module box() {
             
             figure_base_cutouts();
             
-            if (Box_Type == "open_concave") {
+            if (is_concave_sides) {
                 round_sidewall_cuts();
-            } else if (Box_Type == "closable") {
+            } else if (is_closable_box) {
                 rails_sidewall_cuts();
                 rails_bottom_rail_negative();
             }
         }
         
-        if (Box_Type == "closable") {
+        if (is_closable_box) {
             frontCeiling_Thickness_rails();
         }
     }
