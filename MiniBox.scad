@@ -83,9 +83,13 @@ padding_z = 1.2;
 front_wall_buffer = 0.5;
 
 /* [Rail Settings] */
+// Offset of the rail from the front edge
 rail_offset = 1.01;
+// Width of the rail inside (must be less than rail_width_outer)
 rail_width_inner = 0.51;
+// Width of the rail at the opening
 rail_width_outer = 1.01;
+// Depth of the rail
 rail_depth = 1.01;
 
 /* [Hidden] */
