@@ -38,11 +38,11 @@ Back_Overhang_Override = 0.01; //[::float]
 
 /* [Box Size Override] */
 // Minimal width of box (measured in grid fields)
-Box_Width_Override = 1; //[2:18]
+Box_Width_Override = 2; //[2:18]
 // Minimal depth of box (measured in grid fields)
-Box_Depth_Override = 1; //[2:8]
+Box_Depth_Override = 2; //[2:8]
 // Minimal height of box (measured in grid fields)
-Box_Height_Override = 1; //[2:12]
+Box_Height_Override = 3; //[2:12]
 
 /* [Magnet Configuration] */
 // Cut out cylinder magnet hole?
@@ -68,7 +68,7 @@ Mini_Base_Cut_Out_Depth=1.0;
 // Height of mini base (in mm)
 Mini_Base_Height=2.5;
 
-/* [Padding] */
+/* [Padding and Buffering] */
 // Additional space on left side of miniature 
 padding_x_left = 0.2;
 // Additional space on right side of miniature 
@@ -79,6 +79,12 @@ padding_y_front = 0.2;
 padding_y_back = 0.2;
 // Additional space above miniature 
 padding_z = 1.2;
+// Additional space on very left side of box 
+buffer_left = 0.1;
+// Additional space on very right side of box 
+buffer_right = 0.1;
+// Addition to base cutout diameter  (in mm)
+base_cutout_padding = 0.75;
 // Shrinkage of slide-in wall 
 front_wall_buffer = 0.5;
 
@@ -99,6 +105,8 @@ draw_3d_door = (Box_Type == "closable-box-and-door") || (Box_Type == "3d-door");
 draw_2d_door = (Box_Type == "2d-door");
 is_closable_box = (Box_Type == "closable-box-and-door") || (Box_Type == "closable-box");
 is_concave_sides = (Box_Type == "open_concave");
+is_openlock = (Openlock_Support == "yes");
+is_magnet = (Magnet_Support == "yes");
 
 // because of the upper rail we have to increase the z padding for the mini to pass through the opening:
 padding_z_effective = padding_z + (is_closable_box ? rail_depth : 0);
@@ -128,7 +136,6 @@ overhang_front = Front_Back_Overhang_Mode == "only_front" ? Front_Overhang_Overr
 overhang_back  = Front_Back_Overhang_Mode == "only_front" ? Back_Overhang_Override :
                  Front_Back_Overhang_Mode == "only_back"  ? Back_Overhang_Override + distr_depth_overhang :
                                                             Back_Overhang_Override + distr_depth_overhang / 2;
-
 echo(
     str("Actual Overhangs: ",
         "Left=", overhang_left,
@@ -136,17 +143,26 @@ echo(
         ", Front=", overhang_front,
         ", Back=", overhang_back
 ));
-
                     
 padded_mini_x = padding_x_left + mini_x + padding_x_right;
 padded_mini_y = padding_y_front + mini_y + padding_y_back;
 padded_mini_z = mini_z + padding_z_effective;
 
-x = max(ceil((Side_Wall_Thickness + padded_mini_x * Number_of_Minis + Side_Wall_Thickness) / Grid_Size), Box_Width_Override);
+minimal_openlock_buffer_left = 11.1 - Side_Wall_Thickness - padding_x_left - overhang_left - ((Mini_Base_Size + base_cutout_padding) / 2 - Magnet_Diameter / 2);
+minimal_openlock_buffer_right = 11.1 - Side_Wall_Thickness - padding_x_right - overhang_right - ((Mini_Base_Size + base_cutout_padding) / 2 - Magnet_Diameter / 2);
+eff_buffer_left = max(buffer_left, is_openlock && is_magnet ? minimal_openlock_buffer_left : 0);
+eff_buffer_right = max(buffer_right, is_openlock && is_magnet ? minimal_openlock_buffer_right : 0);
+echo(
+    str("Effective side buffers: ",
+        "Left=", eff_buffer_left,
+        ", Right=", eff_buffer_right
+));
+
+x = max(ceil((Side_Wall_Thickness + eff_buffer_left + padded_mini_x * Number_of_Minis + eff_buffer_right + Side_Wall_Thickness) / Grid_Size), Box_Width_Override);
 y = max(ceil((front_wall_thickness + padded_mini_y + Back_Wall_Thickness) / Grid_Size), Box_Depth_Override);
 z = max(ceil((Floor_Thickness + padded_mini_z + Ceiling_Thickness) / Grid_Size), Box_Height_Override);
 
-x_space_per_mini = (Grid_Size*x - 2 * Side_Wall_Thickness) / Number_of_Minis;
+x_space_per_mini = (Grid_Size*x - 2 * Side_Wall_Thickness- eff_buffer_left - eff_buffer_right) / Number_of_Minis;
 y_space_per_mini = Grid_Size*y - front_wall_thickness - Back_Wall_Thickness;
 z_space_per_mini = Grid_Size*z - Floor_Thickness - ceiling_edge_thickness;
 
@@ -156,11 +172,9 @@ eff_mini_z = z_space_per_mini - padding_z_effective;
 
 eff_overhang_left = overhang_left + (eff_mini_x - mini_x) / 2;
 eff_overhang_right = overhang_right + (eff_mini_x - mini_x) / 2;
-eff_base_x = x_space_per_mini - eff_overhang_left - eff_overhang_right - padding_x_left - padding_x_right;
 
 eff_overhang_front = overhang_front + (eff_mini_y - mini_y) / 2;
 eff_overhang_back = overhang_back + (eff_mini_y - mini_y) / 2;
-eff_base_y = y_space_per_mini - eff_overhang_front - eff_overhang_back - padding_y_front - padding_y_back;
 
 echo(
     str("Input miniature dimensions: ",
@@ -330,9 +344,9 @@ module round_sidewall_cuts() {
 module figure_base_cutout() {
   translate([0,0,Floor_Thickness - Mini_Base_Cut_Out_Depth])
     linear_extrude(Mini_Base_Height + Mini_Base_Cut_Out_Depth)
-    circle(d=Mini_Base_Size + 0.75, $fn=100);
+    circle(d=Mini_Base_Size + base_cutout_padding, $fn=100);
   
-  if (Magnet_Support == "yes") {
+  if (is_magnet) {
     translate([0,0,Floor_Thickness - Mini_Base_Cut_Out_Depth - magnet_height])
       linear_extrude(magnet_height + 0.01)
       circle(d=Magnet_Diameter, $fn=100);
@@ -341,8 +355,8 @@ module figure_base_cutout() {
 
 module figure_base_cutouts() {
     for ( i = [0 : Number_of_Minis-1] ) {
-        translate([Side_Wall_Thickness + padding_x_left + eff_overhang_left + eff_base_x / 2 + x_space_per_mini * i,
-      front_wall_thickness + padding_y_front + eff_overhang_front + eff_base_y /2, 0])
+        translate([Side_Wall_Thickness + eff_buffer_left + padding_x_left + eff_overhang_left + Mini_Base_Size / 2 + x_space_per_mini * i,
+      front_wall_thickness + padding_y_front + eff_overhang_front + Mini_Base_Size / 2, 0])
         figure_base_cutout();
     }
 }
@@ -354,7 +368,7 @@ module box() {
             
             back_grooves();
             
-            if (Openlock_Support == "yes") {
+            if (is_openlock) {
               openlock_negatives();
             }
             
