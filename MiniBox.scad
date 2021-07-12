@@ -10,7 +10,7 @@ Openlock_Support = "yes"; //["yes":Yes - cut out OpenLOCK connector bays, "no":N
 
 /* [Miniature Configuration] */
 // How many minis shall be stored?
-Number_of_Minis = 1; //[1:8]
+Number_of_Minis = 1; //[1:9]
 
 // Diameter of mini's base
 Mini_Base_Size = 25.25; //[16.37:small - 16.37 mm, 25.25:medium - 25.25 mm, 50.5:large - 50.5 mm, 75.75:huge - 75.75 mm, 101.0:gargantuan - 101 mm]
@@ -84,7 +84,7 @@ buffer_left = 0.1;
 // Additional space on very right side of box 
 buffer_right = 0.1;
 // Addition to base cutout diameter  (in mm)
-base_cutout_padding = 0.75;
+base_cutout_padding = 0.68;
 // Shrinkage of slide-in wall 
 front_wall_buffer = 0.5;
 
